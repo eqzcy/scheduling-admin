@@ -16,6 +16,12 @@
           <span>{{scope.row.stuCount}}</span>
         </template>
       </el-table-column>
+
+      <el-table-column min-width="150px" label="班数">
+        <template slot-scope="scope">
+          <span>{{scope.row.classCount}}</span>
+        </template>
+      </el-table-column>
     </el-table>
 
     固定时课程节次组合
@@ -74,6 +80,8 @@
         </template>
       </el-table-column>
       </el-table>
+      <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="distTeachClass(statItemList[0].times)">一键分班
+      </el-button>
     </div>
 
   </div>
@@ -81,6 +89,7 @@
 
 <script>
   import { getAutoGroupList, getElectiveStatList } from '@/api/electiveRecord'
+  import { distTeachClass } from '@/api/distClass'
   export default {
     name: 'electiveList',
     components: {},
@@ -88,7 +97,8 @@
       return {
         autoGroupList: null,
         electiveStatList: null,
-        listLoading: true
+        listLoading: true,
+        loading: false
       }
     },
     created() {
@@ -109,6 +119,27 @@
         getElectiveStatList(999).then(response => {
           this.electiveStatList = response.data
           this.listLoading = false
+        }).catch(err => {
+          this.fetchSuccess = false
+          console.log(err)
+        })
+      },
+      distTeachClass(times) {
+        console.log('一键分班')
+        console.log(times)
+        let param = {}
+        param.times = times
+        param.actId = '999'
+        param.settingId = '999'
+        distTeachClass(param).then(response => {
+          this.loading = true
+          this.$notify({
+            title: '成功',
+            message: '分班成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.loading = false
         }).catch(err => {
           this.fetchSuccess = false
           console.log(err)

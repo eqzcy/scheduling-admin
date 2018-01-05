@@ -1,3 +1,6 @@
+/**
+ * 选课接口
+ */
 import request from '@/utils/request'
 
 export function getAll() {

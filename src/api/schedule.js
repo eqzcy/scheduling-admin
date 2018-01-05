@@ -1,3 +1,6 @@
+/**
+ * 排课接口
+ */
 import request from '@/utils/request'
 
 export function getScheduleSettingList(query) {
